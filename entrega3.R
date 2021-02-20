@@ -338,9 +338,9 @@ total_var2 <- var_sys_all2 + var_idio_all2
 rownames(total_var2) <- "Total var"
 
 var_sys_all2_perc <- (var_sys_all2/total_var2)*100
-var_idio_al2l_perc <- (var_idio_all2/total_var2)*100
+var_idio_all_perc <- (var_idio_all2/total_var2)*100
 
-results_2c <- rbind(B_all2, total_var2, var_sys_all2_perc, var_idio_al2l_perc)
+results_2c <- rbind(B_all2, total_var2, var_sys_all2_perc, var_idio_all_perc)
 # Results in LaTeX:
 #print(xtable(results_2c, type = "latex"), file = "results_2c.tex")
 print(results_2c)
@@ -508,9 +508,9 @@ var_sys_all_barra2_perc <- (var_sys_all_barra2/total_var_barra2)*100
 var_idio_all_barra2_perc <- (var_idio_all_barra2/total_var_barra2)*100
 
 results_3b <- rbind(total_var_barra2, var_sys_all_barra2_perc, 
-                    var_idio_all_barra2, B_barra_all2)
+                    var_idio_all_barra2_perc, B_barra_all2)
 # Results in LaTeX:
-print(xtable(results_3b, type = "latex"), file = "results_3b.tex")
+#print(xtable(results_3b, type = "latex"), file = "results_3b.tex")
 print(results_3b)
 
 
