@@ -544,3 +544,56 @@ print(results_3brisk)
 # # Results in LaTeX:
 # #print(xtable(results_3b_gls, type = "latex"), file = "results_3b_gls.tex")
 # print(results_3b_gls)
+# 
+# risk_sys_all_gls2 <- sqrt(var_sys_all_gls2/T)
+# rownames(risk_sys_all_gls2) <- "Systematic risk"
+# risk_idio_all_gls2 <- sqrt(var_idio_all_gls2/T)
+# rownames(risk_idio_all_gls2) <- "Idiosyncratic risk"
+# total_risk_gls2 <- risk_sys_all_gls2 + risk_idio_all_gls2
+# rownames(total_risk_gls2) <- "Total risk"
+# 
+# results_3b_glsrisk <- rbind(total_risk_gls2, risk_sys_all_gls2, 
+#                             risk_idio_all_gls2)
+# # Results in LaTeX:
+# #print(xtable(results_3b_glsrisk, type = "latex"), file = "results_3b_glsrisk.tex")
+# print(results_3b_glsrisk)
+
+#### Excercise 4 ####
+
+R_square_all <- R_square %*% W
+R_square_barra_all <- R_square_barra %*% W
+R_square_comp <- rbind(R_square_all, R_square_barra_all)
+rownames(R_square_comp) <- c("PCA", "BARRA")
+
+results_4 <- R_square_comp
+# Results in LaTeX:
+#print(xtable(results_4, type = "latex"), file = "results_4.tex")
+print(results_4)
+
+
+#### Plotting ####
+
+# Total Variance
+portfolio <- c(rep("Core" , 2), rep("Non core" , 2), rep("Consumer" , 2),
+               rep("Fin" , 2), rep("Ind" , 2), 
+               rep("Equally" , 2))
+model <- rep(c("Time Series", "BARRA" ) , 6)
+l <- list(a=results_2[6,],b=results_3a[1,])
+value <- do.call(rbind, l)
+data_4 <- data.frame(portfolio,model,value)
+ggplot(data_4, aes(fill=model, y=value, x=portfolio)) + 
+  geom_bar(position="dodge", stat="identity")
+
+# Systematic Variance
+l_sys <- list(a=results_2[7,],b=results_3a[2,])
+value_sys <- do.call(rbind, l_sys)
+data_4_sys <- data.frame(portfolio,model,value_sys)
+ggplot(data_4_sys, aes(fill=model, y=value_sys, x=portfolio)) + 
+  geom_bar(position="dodge", stat="identity")
+
+# Idiosyncratic Variance
+l_idio <- list(a=results_2[8,],b=results_3a[3,])
+value_idio <- do.call(rbind, l_idio)
+data_4_idio <- data.frame(portfolio,model,value_idio)
+ggplot(data_4_idio, aes(fill=model, y=value_idio, x=portfolio)) + 
+  geom_bar(position="dodge", stat="identity")
