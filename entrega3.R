@@ -587,7 +587,7 @@ print(results_4)
 portfolio <- c(rep("Core" , 2), rep("Non core" , 2), rep("Goods" , 2),
                rep("Fin" , 2), rep("Ind" , 2), 
                rep("Equally" , 2))
-model <- rep(c("Time Series", "BARRA" ) , 6)
+model <- rep(c("PCA", "BARRA" ) , 6)
 l <- list(a=results_2[6,],b=results_3a_gls[1,])
 value_total <- do.call(rbind, l)
 data_4 <- data.frame(portfolio,model,value_total)
