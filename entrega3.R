@@ -388,12 +388,12 @@ factors_barra <- G_barra
 E_barra <- t(returns) - B_barra %*% factors_barra
 
 # Error variance
-diagD_barra <-  diag(crossprod(t(E_barra))/(T-(nfactors+1))) 
+diagD_barra <-  diag(crossprod(t(E_barra))/(T - nfactors)) 
 # \sigma^2 = ee'/(T-(k+1))
 
 # R2
 sumSquares_barra = apply(returns, 2, function(x) {sum( (x - mean(x))^2 )})
-R_square_barra = 1 - (T-(nfactors+1))*diagD_barra/sumSquares_barra
+R_square_barra = 1 - (T - nfactors)*diagD_barra/sumSquares_barra
 
 # Variance decomposition
 var_f_barra <- var(t(factors_barra)) # Var-Cov matrix
@@ -448,11 +448,11 @@ factors_gls <-  solve(t(B_barra) %*% var_idio_barra_inv %*% B_barra)  %*% t(B_ba
 E_gls <-  t(returns) - B_barra %*% factors_gls
 
 # Error variance
-diagD_gls <- diag(crossprod(t(E_gls))/(T - (nfactors+1)))
+diagD_gls <- diag(crossprod(t(E_gls))/(T - nfactors))
 
 # R2
 sumSquares_gls = apply(returns, 2, function(x) {sum( (x - mean(x))^2 )})
-R_square_gls = 1 - (T-(nfactors+1))*diagD_gls/sumSquares_gls
+R_square_gls = 1 - (T - nfactors)*diagD_gls/sumSquares_gls
 
 # Var-cov matrices
 var_f_gls <- var(t(factors_gls))  # Factors
