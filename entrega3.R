@@ -320,7 +320,7 @@ risk_sys_all <- sqrt(var_sys_all/T)
 rownames(risk_sys_all) <- "Systematic risk"
 risk_idio_all <- sqrt(var_idio_all/T)
 rownames(risk_idio_all) <- "Idiosyncratic risk"
-total_risk <- risk_sys_all + risk_idio_all
+total_risk <- sqrt(total_var/T)
 rownames(total_risk) <- "Total risk"
 
 results_2risk <- rbind(total_risk, risk_sys_all, risk_idio_all)
@@ -356,7 +356,7 @@ risk_sys_all2 <- sqrt(var_sys_all2/T)
 rownames(risk_sys_all2) <- "Systematic risk"
 risk_idio_all2 <- sqrt(var_idio_all2/T)
 rownames(risk_idio_all2) <- "Idiosyncratic risk"
-total_risk2 <- risk_sys_all2 + risk_idio_all2
+total_risk2 <- sqrt(total_var2/T)
 rownames(total_risk2) <- "Total risk"
 
 results_2crisk <- rbind(total_risk2, risk_sys_all2, risk_idio_all2)
@@ -431,7 +431,7 @@ risk_sys_all_barra <- sqrt(var_sys_all_barra/T)
 rownames(risk_sys_all_barra) <- "Systematic risk"
 risk_idio_all_barra <- sqrt(var_idio_all_barra/T)
 rownames(risk_idio_all_barra) <- "Idiosyncratic risk"
-total_risk_barra <- risk_sys_all_barra + risk_idio_all_barra
+total_risk_barra <- sqrt(total_var_barra/T)
 rownames(total_risk_barra) <- "Total risk"
 
 results_3arisk <- rbind(total_risk_barra, risk_sys_all_barra, risk_idio_all_barra)
@@ -488,7 +488,7 @@ risk_sys_all_gls <- sqrt(var_sys_all_gls/T)
 rownames(risk_sys_all_gls) <- "Systematic risk"
 risk_idio_all_gls <- sqrt(var_idio_all_gls/T)
 rownames(risk_idio_all_gls) <- "Idiosyncratic risk"
-total_risk_gls <- risk_sys_all_gls + risk_idio_all_gls
+total_risk_gls <- sqrt(total_var_gls/T)
 rownames(total_risk_gls) <- "Total risk"
 
 results_3a_glsrisk <- rbind(total_risk_gls, risk_sys_all_gls, risk_idio_all_gls)
@@ -524,7 +524,7 @@ risk_sys_all_barra2 <- sqrt(var_sys_all_barra2/T)
 rownames(risk_sys_all_barra2) <- "Systematic risk"
 risk_idio_all_barra2 <- sqrt(var_idio_all_barra2/T)
 rownames(risk_idio_all_barra2) <- "Idiosyncratic risk"
-total_risk_barra2 <- risk_sys_all_barra2 + risk_idio_all_barra2
+total_risk_barra2 <- sqrt(total_var_barra2/T)
 rownames(total_risk_barra2) <- "Total risk"
 
 results_3brisk <- rbind(total_risk_barra2, risk_sys_all_barra2, 
@@ -558,7 +558,7 @@ risk_sys_all_gls2 <- sqrt(var_sys_all_gls2/T)
 rownames(risk_sys_all_gls2) <- "Systematic risk"
 risk_idio_all_gls2 <- sqrt(var_idio_all_gls2/T)
 rownames(risk_idio_all_gls2) <- "Idiosyncratic risk"
-total_risk_gls2 <- risk_sys_all_gls2 + risk_idio_all_gls2
+total_risk_gls2 <- sqrt(total_var_gls2/T)
 rownames(total_risk_gls2) <- "Total risk"
 
 results_3b_glsrisk <- rbind(total_risk_gls2, risk_sys_all_gls2, 
