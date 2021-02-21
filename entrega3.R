@@ -375,7 +375,7 @@ dummy_div <- as.numeric(mean(description$`DIV RATE UNADJUST`) <
                       description$`DIV RATE UNADJUST`) # Greater dividends
 dummy_beta <- as.numeric(description$BETA > 1) # Greater betas (More agressive)
 
-B_barra <- as.matrix(cbind(dummy_industry[, c(3, 5, 7)], dummy_core[,-2], 
+B_barra <- as.matrix(cbind(dummy_sector[, -1], dummy_core[,-2], 
                            dummy_size, dummy_div, dummy_beta))
 
                      
@@ -405,8 +405,9 @@ cor_barra <-  cov2cor(var_f_barra) # Correlation matrix
 
 # Cross-section model results
 B_barra_all <-  t(B_barra) %*% W
-rownames(B_barra_all) <- c("Goods", "Financials", "Industrials", "Core", 
-                           "Size", "Dividend", "Beta") 
+rownames(B_barra_all) <- c("BM & Industrials", "Consumer", "Health", 
+                           "Financials", "Oil, gas and utilities", 
+                           "Tech and teleco", "Core", "Size", "Dividend", "Beta")  
 var_sys_all_barra <-  t(diag(t(B_barra_all) %*% var_f_barra %*% B_barra_all))
 rownames(var_sys_all_barra) <- "Sys var"
 var_idio_all_barra <- t(diag(t(W) %*% diag(diagD_barra) %*% W))
@@ -442,27 +443,30 @@ print(results_3arisk)
 #### GLS estimation ####
 var_idio_barra_inv <- solve(var_idio_barra) # Heteroskedasticity correction
 
-G_gls <-  solve(t(B_barra) %*% var_idio_barra_inv %*% B_barra)  %*% t(B_barra) %*%
+factors_gls <-  solve(t(B_barra) %*% var_idio_barra_inv %*% B_barra)  %*% t(B_barra) %*%
   var_idio_barra_inv %*% t(returns)
-factors_gls <-  G_gls
-E_gls <-  t(returns) - B_barra %*% G_gls
+E_gls <-  t(returns) - B_barra %*% factors_gls
 
 # Error variance
-diagD_gls <-  diag(crossprod(t(E_gls)/(N-(nfactors+1))))
+diagD_gls <- diag(crossprod(t(E_gls))/(T - (nfactors+1)))
+
+# R2
+sumSquares_gls = apply(returns, 2, function(x) {sum( (x - mean(x))^2 )})
+R_square_gls = 1 - (T-(nfactors+1))*diagD_gls/sumSquares_gls
 
 # Var-cov matrices
 var_f_gls <- var(t(factors_gls))  # Factors
-var_sys_gls <-  t(factors_gls) %*% var_f_gls %*% (factors_gls) # Systematic
+var_sys_gls <- B_barra %*% var_f_barra %*% t(B_barra)
 var_idio_gls <- diag(diagD_gls) # Idiosyncratic
-
-cov_gls <-  var_sys_gls + diag(var_idio_gls) # Covariance
+cov_gls <-  var_sys_gls + var_idio_gls # Covariance
 cor_gls <-  cov2cor(cov_gls) # Correlation
 
 
 # GLS results
 B_barra_all <-  t(B_barra) %*% W
-rownames(B_barra_all) <- c("Goods", "Financials", "Industrials", "Core", 
-                           "Size", "Dividend", "Beta")
+rownames(B_barra_all) <- c("BM & Industrials", "Consumer", "Health", 
+                           "Financials", "Oil, gas and utilities", 
+                           "Tech and teleco", "Core", "Size", "Dividend", "Beta")
 var_sys_all_gls <-  t(diag(t(B_barra_all) %*% var_f_gls %*% B_barra_all))
 rownames(var_sys_all_gls) <- "Sys var"
 var_idio_all_gls <- t(diag(t(W) %*% diag(diagD_gls) %*% W))
@@ -496,8 +500,9 @@ print(results_3a_glsrisk)
 #### Section b) ####
 # Cross-section model results
 B_barra_all2 <-  t(B_barra) %*% W2
-rownames(B_barra_all2) <- c("Goods", "Financials", "Industrials", "Core", 
-                            "Size", "Dividend", "Beta")
+rownames(B_barra_all2) <- c("BM & Industrials", "Consumer", "Health", 
+                            "Financials", "Oil, gas and utilities", 
+                            "Tech and teleco", "Core", "Size", "Dividend", "Beta")
 var_sys_all_barra2 <-  t(diag(t(B_barra_all2) %*% var_f_barra %*% B_barra_all2))
 rownames(var_sys_all_barra2) <- "Sys var"
 var_idio_all_barra2 <- t(diag(t(W2) %*% diag(diagD_barra) %*% W2))
@@ -530,8 +535,9 @@ print(results_3brisk)
 
 # GLS results
 B_barra_all2 <-  t(B_barra) %*% W2
-rownames(B_barra_all2) <- c("Goods", "Financials", "Industrials", "Core", 
-                            "Size", "Dividend", "Beta")
+rownames(B_barra_all2) <- c("BM & Industrials", "Consumer", "Health", 
+                            "Financials", "Oil, gas and utilities", 
+                            "Tech and teleco", "Core", "Size", "Dividend", "Beta")
 var_sys_all_gls2 <-  t(diag(t(B_barra_all2) %*% var_f_gls %*% B_barra_all2))
 rownames(var_sys_all_gls2) <- "Sys var"
 var_idio_all_gls2 <- t(diag(t(W2) %*% diag(diagD_gls) %*% W2))
@@ -565,7 +571,8 @@ print(results_3b_glsrisk)
 
 R_square_all <- R_square %*% W
 R_square_barra_all <- R_square_barra %*% W
-R_square_comp <- rbind(R_square_all, R_square_barra_all)
+R_square_gls_all <- R_square_gls %*% W
+R_square_comp <- rbind(R_square_all, R_square_gls_all)
 rownames(R_square_comp) <- c("PCA", "BARRA")
 
 results_4 <- R_square_comp
@@ -577,25 +584,25 @@ print(results_4)
 #### Plotting ####
 
 # Total Variance
-portfolio <- c(rep("Core" , 2), rep("Non core" , 2), rep("Consumer" , 2),
+portfolio <- c(rep("Core" , 2), rep("Non core" , 2), rep("Goods" , 2),
                rep("Fin" , 2), rep("Ind" , 2), 
                rep("Equally" , 2))
 model <- rep(c("Time Series", "BARRA" ) , 6)
-l <- list(a=results_2[6,],b=results_3a[1,])
-value <- do.call(rbind, l)
-data_4 <- data.frame(portfolio,model,value)
-ggplot(data_4, aes(fill=model, y=value, x=portfolio)) + 
+l <- list(a=results_2[6,],b=results_3a_gls[1,])
+value_total <- do.call(rbind, l)
+data_4 <- data.frame(portfolio,model,value_total)
+ggplot(data_4, aes(fill=model, y=value_total, x=portfolio)) + 
   geom_bar(position="dodge", stat="identity")
 
 # Systematic Variance
-l_sys <- list(a=results_2[7,],b=results_3a[2,])
+l_sys <- list(a=results_2[7,],b=results_3a_gls[2,])
 value_sys <- do.call(rbind, l_sys)
 data_4_sys <- data.frame(portfolio,model,value_sys)
 ggplot(data_4_sys, aes(fill=model, y=value_sys, x=portfolio)) + 
   geom_bar(position="dodge", stat="identity")
 
 # Idiosyncratic Variance
-l_idio <- list(a=results_2[8,],b=results_3a[3,])
+l_idio <- list(a=results_2[8,],b=results_3a_gls[3,])
 value_idio <- do.call(rbind, l_idio)
 data_4_idio <- data.frame(portfolio,model,value_idio)
 ggplot(data_4_idio, aes(fill=model, y=value_idio, x=portfolio)) + 
